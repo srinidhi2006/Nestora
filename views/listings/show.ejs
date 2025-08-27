@@ -1,0 +1,183 @@
+<!--<% layout("/layouts/boilerplate") %>
+<body>
+    <h1>Listing Details : </h1>
+    <div class="card">
+        <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image">
+  <div class="card-body">
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+  </div>
+    </div>
+    <ul>
+<li><%=listing.title%></li>
+<li><%=listing.description%></li>
+<li>&#8377;<%=listing.price%></li>
+<li><%=listing.country%></li>
+<li><%=listing.location%></li>
+
+    </ul>
+    <a href="/listings/<%=listing._id%>/edit">Edit Listing</a><br><br>
+    <form method="post" action="/listings/<%=listing._id%>?_method=Delete">
+        <button>Delete this Listing</button>
+    </form>
+</body>-->
+
+<% layout("/layouts/boilerplate") %>
+
+<body class="bg-light text-dark">
+  <div class="container py-5">
+    <h1 class="mb-4 fw-bold"></h1>
+
+    <div class="row align-items-center g-5">
+      <!-- Image on the left -->
+      <div class="col-md-5">
+        <img
+          src="<%= listing.image.url %>"
+          alt="listing image"
+          class="img-fluid rounded-3 shadow-sm"
+          style="max-height: 350px; object-fit: cover; width: 100%;"
+        />
+      </div>
+
+      <!-- Text on the right -->
+      <div class="col-md-7">
+        <h2 class=" fw-semibold" style="color:  #4f46e5;"><%= listing.title %></h2>
+        <p class="text-muted fs-5"><%= listing.description %></p>
+
+        <ul class="list-unstyled mt-3 mb-4">
+          <li><strong>Owner:</strong><%=listing.owner.username%></li>
+          <li><strong>Price:</strong> ₹<%= listing.price %></li>
+          <li><strong>Location:</strong> <%= listing.location %></li>
+          <li><strong>Country:</strong> <%= listing.country %></li>
+        </ul>
+<%if(currUser && currUser._id.equals(listing.owner._id)) {%>
+        <div class="d-flex gap-3 mt-4">
+          <a href="/listings/<%= listing._id %>/edit" class="btn btn-outline-primary rounded-pill px-4">Edit</a>
+
+          <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+            <button class="btn btn-outline-danger rounded-pill px-4">Delete</button>
+          </form>
+        </div>
+       <%}%>
+      </div>
+    </div>
+  </div><!--end-->
+  <%if(currUser) {%>
+  <div class="mt-5 p-4 bg-white rounded-4 shadow-sm">
+  <h4 class="mb-4 fw-semibold " style="color: #4f46e5;">Leave a Rating</h4>
+  
+  <form method="POST" action="/listings/<%= listing._id %>/reviews" class="needs-validation" novalidate>
+    <!-- Rating slider -->
+    <div class="mb-4">
+      <label for="rating" class="form-label fw-medium">Rating (1 to 5)</label>
+      <input type="range" class="form-range" min="1" max="5" name="review[rating]" id="rating" required />
+      <div class="form-text text-muted">Use the slider to select your rating.</div>
+    </div>
+
+    <!-- Comment box -->
+    <div class="mb-4">
+      <label for="comment" class="form-label fw-medium">Comment</label>
+      <textarea
+        class="form-control shadow-sm"
+        id="comment"
+        name="review[comment]"
+        rows="5"
+        placeholder="Write your feedback here..."
+        required
+      ></textarea>
+      <div class="invalid-feedback">please add some comments for review</div>
+    </div>
+
+    <!-- Submit button -->
+    <div>
+      <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill shadow-sm" style="background-color: #6366f1;">
+        Submit Review
+      </button>
+    </div>
+  </form>
+  <%}%>
+</div>
+<br>
+<hr>
+<br>
+<h4 class="fw-bold mb-4">All Reviews</h4>
+
+
+<div class="container">
+  <div class="row g-4">
+    <% for(let review of listing.reviews) { %>
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+          <div class="card-body">
+            <h5 class="card-title fw-semibold text-primary">
+              <i class="bi bi-person-circle me-2"></i><%=review.author.username%>
+            </h5>
+            <p class="card-text text-secondary mb-2">
+              <%= review.comment %>
+            </p>
+            <div class="text-warning mb-3">
+              <% for(let j = 0; j < review.rating; j++) { %>
+                <i class="bi bi-star-fill"></i>
+              <% } %>
+              <% for(let j = review.rating; j < 5; j++) { %>
+                <i class="bi bi-star"></i>
+              <% } %>
+            </div>
+            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+              <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
+                <i class="bi bi-trash3"></i> Delete
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      
+    <% } %>
+    <br><br>
+  </div>
+ <div class="container my-5">
+  <h4 class="fw-bold mb-4">Map Location</h4>
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-0">
+      <div id="map" class="rounded-4" style="height: 400px; width: 100%;"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+    // 🔑 Replace with your free MapTiler API key
+    let mapToken = "<%= process.env.MAP_TOKEN %>";
+    const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>; 
+    
+    let latlng;
+
+    if (coordinates && coordinates.length === 2) {
+        // GeoJSON format is [lng, lat], Leaflet wants [lat, lng]
+        latlng = [coordinates[1], coordinates[0]];
+    } else {
+        // Default: New Delhi
+        latlng = [28.6139, 77.2090];
+    }
+
+    const key = mapToken;
+    
+
+    // Initialize the map centered on latlng
+    const map = L.map('map').setView(latlng, 13);
+
+    // Add MapTiler tiles
+    L.tileLayer(`https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${key}`, {
+        attribution: '<a href="https://www.maptiler.com/">© MapTiler</a> © OpenStreetMap contributors',
+    }).addTo(map);
+
+    // Add a marker with popup
+    L.marker(latlng)
+        .addTo(map)
+        .bindPopup(`<b>📍 Location `)
+        .openPopup();
+</script>
+
+
+<br>
+</body>

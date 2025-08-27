@@ -1,0 +1,105 @@
+<!--<% layout("/layouts/boilerplate") %>
+<body>
+    <h1>Create a new Listing</h1>
+    <form method="post" action="/listings">
+        <input name="listing[title]" placeholder="Enter the title" input type="text">
+        <br><br>
+        <textarea  name="listing[description]"placeholder="Enter the description" ></textarea>
+        <br><br>
+        <input name="listing[image]" placeholder="Enter image URL" input type="text">
+        <br><br>
+        <input name="listing[price]" placeholder="Enter the price" input type="number">
+        <br><br>
+        <input name="listing[country]" placeholder="Enter the country" input type="text">
+        <br><br>
+        <input name="listing[location]" placeholder="Enter the location" input type="text">
+        <br><br>
+        <button>Add</button>
+    </form>
+</body>-->
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-5">
+
+  <!-- 🟣 Top Intro Section -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold text-violet">Add a New Listing</h1>
+    <p class="text-muted fs-5 mt-3">
+      Share your unique space with the world — whether it's a cozy cabin, beachside villa, or a city apartment. Fill out the details below to get started.
+    </p>
+  </div>
+
+  <!-- 🟣 Integrated Form Section -->
+  <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+    <div class="row g-4">
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Title</label>
+        <input type="text" name="listing[title]" class="form-control" placeholder="e.g., Serene Cottage in Ooty" required>
+        <div class="valid-feedback">Title looks good!</div>
+        <div class="invalid-feedback">Title should be valid</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Price (₹/night)</label>
+        <input type="number" name="listing[price]" class="form-control" placeholder="e.g., 3200" required>
+       <div class="invalid-feedback">please enter a valid price</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Country</label>
+        <input type="text" name="listing[country]" class="form-control" placeholder="e.g., India" required>
+      <div class="invalid-feedback">country name should be valid</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Location</label>
+        <input type="text" name="listing[location]" class="form-control" placeholder="e.g., Pondicherry, White Town" required>
+      <div class="invalid-feedback">Location should be valid</div>
+      </div>
+
+      
+      <div class="col-12">
+        <label class="form-label fw-semibold">Upload Listing Image</label>
+        <input type="file" name="listing[image]" class="form-control" placeholder="Paste image link" required>
+       
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold">Description</label>
+        <textarea name="listing[description]" class="form-control" rows="4" placeholder="Describe the property, facilities, nearby attractions..." required></textarea>
+        <div class="valid-feedback">perfect!</div>
+        <div class="invalid-feedback">please enter a short description</div>
+       
+      </div>
+
+      <!-- Optional Amenities -->
+      <div class="col-12">
+        <label class="form-label fw-semibold">Amenities</label><br />
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="wifi" value="wifi" />
+          <label class="form-check-label" for="wifi">Wi-Fi</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="parking" value="parking" />
+          <label class="form-check-label" for="parking">Parking</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="pool" value="pool" />
+          <label class="form-check-label" for="pool">Pool</label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-5">
+      <button type="submit" class="btn-violet px-5 py-2">Add Listing</button>
+    </div>
+  </form>
+
+</div>
+ 
+
+
+
+
