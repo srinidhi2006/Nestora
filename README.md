@@ -27,12 +27,19 @@ Role-based authorization for managing reviews & bookings
  Tech Stack
 
 Frontend: HTML,CSS,Bootstrap
+
 Backend: Node.js, Express.js
+
 Database: MongoDB
+
 Authentication: MongoDB Passport (with cookies for sessions)
+
 Authorization: Secure access for reviews and booking actions
+
 Image Storage: Cloudinary
+
 Maps & Location: MapTiler + Geocoding API
+
 Hosting/Deployment: Render
 
 📷 Screenshots
