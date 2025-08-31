@@ -26,7 +26,7 @@ Role-based authorization for managing reviews & bookings
 
  Tech Stack
 
-Frontend: React, Tailwind CSS
+Frontend: HTML,CSS,Bootstrap
 Backend: Node.js, Express.js
 Database: MongoDB
 Authentication: MongoDB Passport (with cookies for sessions)
